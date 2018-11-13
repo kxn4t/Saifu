@@ -13,11 +13,15 @@ import com.saifu.model.OAuthModel;
 @Service
 public class UserService {
 
-	@Autowired
-	HttpClientService httpClientService;
+	private final HttpClientService httpClientService;
 
 	@Value("${zaim.api.user}")
 	private String userVerifyURL;
+
+	@Autowired
+	public UserService(HttpClientService httpClientService) {
+		this.httpClientService = httpClientService;
+	}
 
 	/**
 	 * ユーザ情報を取得

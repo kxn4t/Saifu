@@ -18,8 +18,12 @@ import com.saifu.service.OAuthService;
 @Controller
 public class IndexController {
 
+	private final OAuthService oauthService;
+
 	@Autowired
-	OAuthService oauthService;
+	public IndexController(OAuthService oauthService) {
+		this.oauthService = oauthService;
+	}
 
 	/**
 	 * 認証済みかどうかはfilterでチェックする

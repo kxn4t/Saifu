@@ -19,10 +19,14 @@ import com.saifu.model.OAuthModel;
 @Service
 public class HttpClientService {
 
-	@Autowired
-	OAuthService oAuthService;
+	private final OAuthService oAuthService;
 	// ステータスコードを見て、エラーとするHandler
-	ResponseHandler<String> responseHandler = new APIResponseHandler();
+	private ResponseHandler<String> responseHandler = new APIResponseHandler();
+
+	@Autowired
+	public HttpClientService(OAuthService oAuthService) {
+		this.oAuthService = oAuthService;
+	}
 
 	/**
 	 * ZaimにGETリクエストを投げる
@@ -30,21 +34,19 @@ public class HttpClientService {
 	 * @return JSON
 	 * @throws Exception
 	 */
-	public String getRequestToZaim(OAuthModel oAuthModel) throws Exception {
+	String getRequestToZaim(OAuthModel oAuthModel) throws Exception {
 
-		CloseableHttpClient httpclient = HttpClients.createDefault();
+		try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
 
-		try {
 			// リクエストに署名する
 			HttpGet httpget = new HttpGet(oAuthModel.getURL());
 			oAuthService.signRequest(httpget, oAuthModel);
 
 			// 取得
 			String responseBody = httpclient.execute(httpget, responseHandler);
+
 			return responseBody;
 
-		} finally {
-			httpclient.close();
 		}
 	}
 

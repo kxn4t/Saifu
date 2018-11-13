@@ -16,8 +16,12 @@ import com.saifu.service.UserService;
 @Controller
 public class SaifuController {
 
+	private final UserService userService;
+
 	@Autowired
-	UserService userService;
+	public SaifuController(UserService userService) {
+		this.userService = userService;
+	}
 
 	@RequestMapping("/saifu")
 	public String saifuTop(@CookieValue(value = "accessToken") String accessToken,
